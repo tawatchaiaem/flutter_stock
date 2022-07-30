@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_stock_v3/services/rest_api.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_stock_v3/themes/styles.dart';
 
@@ -11,6 +13,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   String? email, password;
+
+  TextEditingController mailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   Widget _buildLogo() {
     return Row(
@@ -35,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Padding(
       padding: EdgeInsets.all(8),
       child: TextFormField(
-        controller: null,
+        controller: mailController,
         keyboardType: TextInputType.emailAddress,
         onChanged: (value) {
           setState(() {
@@ -56,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Padding(
       padding: EdgeInsets.all(8),
       child: TextFormField(
-        controller: null,
+        controller: passwordController,
         keyboardType: TextInputType.text,
         obscureText: true,
         onChanged: (value) {
@@ -92,18 +97,16 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginButton() {
+    final ButtonStyle style =
+        ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(bottom: 20),
           child: ElevatedButton(
-            // elevation: 5.0,
-            // color: appTheme().primaryColor,
-            // shape: RoundedRectangleBorder(
-            //   borderRadius: BorderRadius.circular(30.0),
-            // ),
-            onPressed: null,
+            style: style,
+            onPressed: _login,
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
@@ -140,8 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildSocialBtnRow() {
-    print('dfsdfsd');
-    print(FontAwesomeIcons.facebookF);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -290,6 +291,17 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-    ;
+  }
+
+  void _login() async {
+    var userData = {
+      'email': mailController.text,
+      'password': passwordController.text
+    };
+
+    // CALL API
+    var response = await CallAPI().postData(userData, 'login');
+    var body = json.decode(response.body);
+    print(body);
   }
 }
