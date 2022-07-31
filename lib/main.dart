@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       theme: appTheme(),
-      initialRoute: '/',
+      initialRoute: '/dashboard',
       routes: routes,
     );
   }

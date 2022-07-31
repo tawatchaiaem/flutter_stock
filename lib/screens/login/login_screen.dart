@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stock_v3/services/rest_api.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_stock_v3/themes/styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -242,6 +243,27 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // Alert Dialog
+  showAlertDialog(BuildContext context, String msg) {
+    AlertDialog alert = AlertDialog(
+      title: Text('Login Status'),
+      content: Text(msg),
+      actions: <Widget>[
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'))
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   // Loading...
   bool _isLoading = false;
   @override
@@ -294,6 +316,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _login() async {
+    // สร้างตัวเก็บ SharedPreferences
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    // แสดง Loading
+    setState(() {
+      _isLoading = true;
+    });
+
+    // รับค่ามาเก็บลอง list
     var userData = {
       'email': mailController.text,
       'password': passwordController.text
@@ -303,5 +334,26 @@ class _LoginScreenState extends State<LoginScreen> {
     var response = await CallAPI().postData(userData, 'login');
     var body = json.decode(response.body);
     print(body);
+
+    if (body['success']) {
+      setState(() {
+        _isLoading = false;
+      });
+      print('Login success');
+
+      showAlertDialog(context, 'Login Success');
+
+      // sharedPreferences
+      sharedPreferences.setString('storeName', body['data']['name']);
+      sharedPreferences.setString('storeEmail', body['data']['email']);
+
+      Navigator.pushNamed(context, '/dashboard');
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      print('Login fail');
+      showAlertDialog(context, 'Login Fail!');
+    }
   }
 }

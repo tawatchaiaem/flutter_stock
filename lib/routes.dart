@@ -1,6 +1,9 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stock_v3/screens/home/dashboard_screen.dart';
+import 'package:flutter_stock_v3/screens/drawer/about/about_screen.dart';
+import 'package:flutter_stock_v3/screens/drawer/contact/contact_screen.dart';
+import 'package:flutter_stock_v3/screens/drawer/term/term_screen.dart';
+import 'package:flutter_stock_v3/screens/dashboard/dashboard_screen.dart';
 import 'package:flutter_stock_v3/screens/home/home_screen.dart';
 import 'package:flutter_stock_v3/screens/login/login_screen.dart';
 import 'package:flutter_stock_v3/screens/media_query/medai_layout.dart';
@@ -11,9 +14,9 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/login": (BuildContext context) => LoginScreen(),
   "/dashboard": (BuildContext context) => DashboardScreen(),
   // "/register": (BuildContext context) => RegisterScreen(),
-  // "/about": (BuildContext context) => AboutScreen(),
-  // "/contact": (BuildContext context) => ContactScreen(),
-  // "/term": (BuildContext context) => TermScreen(),
+  "/about": (BuildContext context) => AboutScreen(),
+  "/contact": (BuildContext context) => ContactScreen(),
+  "/term": (BuildContext context) => TermScreen(),
 
   // "/addproduct": (BuildContext context) => AddProductScreen(),
 };
